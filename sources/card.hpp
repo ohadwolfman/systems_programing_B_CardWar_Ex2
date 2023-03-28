@@ -1,8 +1,25 @@
-//
-// Created by ohadwolfman on 3/26/23.
-//
+#pragma once
+#include <iostream>
+using namespace std;
 
-#ifndef UNTITLED_CARD_HPP
-#define UNTITLED_CARD_HPP
+namespace ariel {
+    class Card {
+        int card_number;
+        string shape;
 
-#endif //UNTITLED_CARD_HPP
+    public:
+        Card(int card_number, string shape);
+
+        Card();//empty constructor
+
+        //~Card();//destructor
+
+        string toString();
+
+        int getCard_number();
+
+        string getShape();
+
+        int compare(Card other);
+    };
+};
