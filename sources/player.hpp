@@ -20,8 +20,8 @@ namespace ariel {
 
         int stacksize() { return stack; } //prints the amount of cards left
         int cardesTaken() { return cards_won; } // prints the amount of cards this player has won.
-        string getPlayerName() const{ return this->playerName; }
-        int getIsPlayingNow() const{ return this->isPlayingNow; }
-        int getWin_rate() const{ return this->win_rate; }
+        string getPlayerName() { return this->playerName; }
+        int getIsPlayingNow() { return this->isPlayingNow; }
+        double getWin_rate() { return this->win_rate; }
     };
 }

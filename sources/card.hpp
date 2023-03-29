@@ -14,8 +14,8 @@ namespace ariel {
             this->shape =  shape;
         }
 
-        int getCard_number() const{ return this->card_number; }
-        string getShape() const{ return this->shape; }
+        int getCard_number() { return this->card_number; }
+        string getShape() { return this->shape; }
 
         void setNumber(int number);
         void setShape(string shape);
