@@ -26,9 +26,27 @@ TEST_CASE("Stack and initialization") {
     CHECK(p2.cardesTaken() == 0);
 }
 
+TEST_CASE("Check all the functions are compiling") {
+    Player p1("Alice");
+    Player p2("Bob");
+    Game game(p1, p2);
+
+    CHECK_NOTHROW(game.playTurn());
+    CHECK_NOTHROW(game.playAll());
+    CHECK_NOTHROW(game.printLastTurn());
+    CHECK_NOTHROW(game.printWiner());
+    CHECK_NOTHROW(game.printLog());
+    CHECK_NOTHROW(game.printStats());
+}
+
 TEST_CASE("Same Player") {
     Player p1("Eve");
     CHECK_THROWS(Game(p1, p1));
+}
+
+TEST_CASE("Player with no name") {
+    CHECK_THROWS_AS(Player(nullptr), invalid_argument);
+    CHECK_THROWS_AS(Player(""), invalid_argument);
 }
 
 TEST_CASE("Closed system - no card disappear") {
@@ -39,79 +57,55 @@ TEST_CASE("Closed system - no card disappear") {
         game.playTurn();
     }
     int totalCards = p1.stacksize() + p2.stacksize() + p1.cardesTaken() + p2.cardesTaken();
-    CHECK(totalCards == 52);
+    CHECK(totalCards == (2*MaxCards));
 }
 
-TEST_CASE("All Cards are Played and One Player Wins after PlayAll") {
+TEST_CASE("Check amounts Before the game") {
+    Player p1("Alice");
+    Player p2("Bob");
+
+    CHECK(p1.cardesTaken() == 0);
+    CHECK(p2.cardesTaken() == 0);
+    CHECK(p1.stacksize() != 0);
+    CHECK(p2.stacksize() != 0);
+}
+
+TEST_CASE("There is a Winner after PlayAll") {
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);
     game.playAll();
 
-    //Both players should have 0 cards left in their stack
-    CHECK((p1.stacksize() == 0));
-    CHECK((p2.stacksize() == 0));
+    CHECK(p1.stacksize() == MaxCards);
+    CHECK(p2.stacksize() == MaxCards);
 
-    //Only one player should have taken cards
-    bool p1CardsTaken = (p1.cardesTaken() > 0);
-    bool p2CardsTaken = (p2.cardesTaken() > 0);
-    CHECK((p1CardsTaken != p2CardsTaken));
+    CHECK(p1.cardesTaken() != p2.cardesTaken());
 
     //The winning player should have more than 0 cards taken
-    if (p1CardsTaken) {
-        CHECK((p1.cardesTaken() > 0));
-        CHECK((p2.cardesTaken() == 0));
+    if (p1.cardesTaken() > p2.cardesTaken()) {
+        CHECK(p1.cardesTaken() > 0);
+        CHECK(p2.cardesTaken() == 0);
     } else {
-        CHECK((p2.cardesTaken() > 0));
-        CHECK((p1.cardesTaken() == 0));
+        CHECK(p2.cardesTaken() > 0);
+        CHECK(p1.cardesTaken() == 0);
     }
 }
 
-TEST_CASE("PlayTurn: Player has fewer cards after playing a turn") {
+TEST_CASE("cards decreasing together") {
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);
 
     game.playTurn();
-
-    CHECK((p1.stacksize() < 26 && p2.stacksize() < 26));
-    CHECK((p1.stacksize() == p2.stacksize()));
+    CHECK(p1.stacksize() == p2.stacksize());
+    CHECK(p1.stacksize() < MaxCards);
+    CHECK(p2.stacksize() < MaxCards);
 }
 
-TEST_CASE("Playing Against the Same Player Throws an Exception") {
-    Player p1("Alice");
-
-    CHECK_THROWS(Game(p1, p1));
-}
-
-TEST_CASE("Creating a Player with Null or Empty Name Should Throw an Exception") {
-    CHECK_THROWS_AS(Player(nullptr), invalid_argument);
-    CHECK_THROWS_AS(Player(""), invalid_argument);
-}
-
-TEST_CASE("Check Stack Before and After Register") {
+TEST_CASE("playTurn after the end of the game") {
     Player p1("Alice");
     Player p2("Bob");
-
-    // check that both players stack is empty
-    CHECK((p1.stacksize() == 0));
-    CHECK((p2.stacksize() == 0));
-
-    Game game(p1, p1);
-    // check that both players stack isn't empty
-    CHECK((p1.stacksize() != 0));
-    CHECK((p2.stacksize() != 0));
-}
-
-TEST_CASE("Game functions throws exceptions") {
-    Player p1("Alice");
-    Player p2("Bob");
-    Game game(p1, p2);
-
-    CHECK_NOTHROW(game.playTurn());
-    CHECK_NOTHROW(game.printLog());
-    CHECK_NOTHROW(game.printStats());
-    CHECK_NOTHROW(game.playAll());
-    CHECK_NOTHROW(game.printWiner());
-    CHECK_NOTHROW(game.printLastTurn());
+    Game game(p1,p2);
+    game.playAll();
+    CHECK_THROWS(game.playTurn());
 }

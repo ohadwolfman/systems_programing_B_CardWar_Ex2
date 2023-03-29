@@ -10,10 +10,14 @@ Game::Game(){
 }
 
 Game::Game(Player p1, Player p2){
+    if (&p1 == &p2) {
+        throw invalid_argument("same player");
+    }
     this->winner="There is no winner yet";
 }
 
 void Game::playTurn(){
+    this->p1.stacksize();
     cout<<"Play turn"<<std::endl;
 }
 
