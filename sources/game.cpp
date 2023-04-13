@@ -1,8 +1,9 @@
 #include <random>
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 #include "game.hpp"
-#include "player.hpp"
+
 
 using namespace std;
 using namespace ariel;
@@ -12,21 +13,15 @@ Game::Game():
     p2(Player("Bob")),
     winner("There is no winner yet"),
     draws(0),
-    stats (),
-    deck()
-    {
-    shuffleNewDeck(deck);
-    }
+    stats (){}
 
 Game::Game(Player &p1, Player &p2):
         p1(p1),
         p2(p2),
         winner("There is no winner yet"),
         draws(0),
-        stats (),
-        deck()
+        stats ()
         {
-            shuffleNewDeck(deck);
             if(&p1 == &p2) {
                 throw invalid_argument("same player");
             }
@@ -41,13 +36,12 @@ void Game::shuffleNewDeck(vector<Card>& deck){
         deck.push_back(Card(i,"Clubs"));
         deck.push_back(Card(i,"Spades"));
     }
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(deck.begin(), deck.end(), g);
+
+    random_shuffle(deck.begin(), deck.end()); //https://stackoverflow.com/questions/6926433/how-to-shuffle-a-stdvector
 
     for (size_t i = 0; i < 26; i++) {
-        p1.insertCardToStack(deck[i * 2]);
-        p2.insertCardToStack(deck[i * 2 + 1]);
+        p1.insertCardToStack(deck[i*2]);
+        p2.insertCardToStack(deck[i*2 + 1]);
     }
 }
 

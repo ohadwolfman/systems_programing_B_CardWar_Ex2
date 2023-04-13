@@ -12,5 +12,7 @@ namespace ariel {
         Card (int card_number, string shape);
         string toString();
         int compare(Card other); //return 1 if the first number is higher, -1 if the other number is higher, 0 otherwise
+        int getCardNumber();
+        string getShape();
     };
 }

@@ -10,7 +10,7 @@ Card::Card (int card_number, string shape):
 
 string Card::toString() {
     if (this->card_number<11 && this->card_number!=1){
-        return this->card_number + " of " + this->shape;
+        return this->getCardNumber() + " of " + this->getShape();
     }
     else if (this->card_number == 1) {
         return "Ace of " + this->shape;
@@ -42,4 +42,12 @@ int Card::compare(Card other){
     else{
         return 0;
     }
+}
+
+int Card::getCardNumber(){
+    return this->card_number;
+}
+
+string Card::getShape() {
+    return this->shape;
 }

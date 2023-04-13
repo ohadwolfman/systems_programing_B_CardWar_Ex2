@@ -1,12 +1,11 @@
 #pragma once
 
-#include <random>
 #include <iostream>
 #include <vector>
 #include "player.hpp"
 #include "card.hpp"
-using namespace ariel;
 using namespace std;
+using namespace ariel;
 
 class Game{
 private:
@@ -15,7 +14,6 @@ private:
     int draws;
     vector<Card> deck;
     vector<string> stats;
-
 
 public:
     Game();
