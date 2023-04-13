@@ -1,6 +1,9 @@
 #pragma once
 
-#include <iostream>
+#include <string>
+#include <vector>
+#include "card.hpp"
+
 #define MaxCards 26
 
 using namespace std;
@@ -9,19 +12,19 @@ namespace ariel {
     class Player {
     private:
         string playerName;
-        int stack;
-        bool isPlayingNow;
+        vector <Card> stack;
         int cards_won;
-        double win_rate;
+        double winnings;
+        bool isPlayingNow;
 
     public:
-        Player(); //default constructor
         Player(string playerName); //constructor
-
-        int stacksize() { return stack; } //prints the amount of cards left
-        int cardesTaken() { return cards_won; } // prints the amount of cards this player has won.
-        string getPlayerName() { return this->playerName; }
-        int getIsPlayingNow() { return this->isPlayingNow; }
-        double getWin_rate() { return this->win_rate; }
+        string getPlayerName();
+        int stacksize(); // returns the amount of cards left
+        int cardesTaken(); // returns the amount of cards this player has won in this game.
+        int getWinnings(); // returns the amount of winnings the player won
+        void wonTheTurn(int amount);
+        void wonTheGame();
+        Card draw_A_Card();
     };
 }
