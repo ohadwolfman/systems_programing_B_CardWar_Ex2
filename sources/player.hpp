@@ -15,7 +15,7 @@ namespace ariel {
         vector <Card> stack;
         int cards_won;
         double winnings;
-        bool isPlayingNow;
+        bool PlayingNow;
 
     public:
         Player(string playerName); //constructor
@@ -23,8 +23,10 @@ namespace ariel {
         int stacksize(); // returns the amount of cards left
         int cardesTaken(); // returns the amount of cards this player has won in this game.
         int getWinnings(); // returns the amount of winnings the player won
+        bool isPlayingNow();
         void wonTheTurn(int amount);
         void wonTheGame();
         Card draw_A_Card();
+        void insertCardToStack(Card c);
     };
 }

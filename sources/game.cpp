@@ -1,33 +1,87 @@
-#include "game.hpp"
+#include <random>
 #include <iostream>
+#include <algorithm>
+#include "game.hpp"
 #include "player.hpp"
+
 using namespace std;
+using namespace ariel;
 
-Game::Game(){
-    this->p1= Player("Alice");
-    this->p2= Player("Bob");
-    this->winner= "There is no winner yet";
-}
-
-Game::Game(Player &p1, Player &p2){
-    if (&p1 == &p2) {
-        throw invalid_argument("same player");
+Game::Game():
+    p1(Player("Alice")),
+    p2(Player("Bob")),
+    winner("There is no winner yet"),
+    draws(0),
+    stats (),
+    deck()
+    {
+    shuffleNewDeck(deck);
     }
-    this->winner="There is no winner yet";
+
+Game::Game(Player &p1, Player &p2):
+        p1(p1),
+        p2(p2),
+        winner("There is no winner yet"),
+        draws(0),
+        stats (),
+        deck()
+        {
+            shuffleNewDeck(deck);
+            if(&p1 == &p2) {
+                throw invalid_argument("same player");
+            }
+            if (p1.isPlayingNow() || p2.isPlayingNow())
+                throw runtime_error("Wait until both of the players will finish their games");
+        }
+
+void Game::shuffleNewDeck(vector<Card>& deck){
+    for(int i=1; i<=13 ;i++){
+        deck.push_back(Card(i,"Heart"));
+        deck.push_back(Card(i,"Diamonds"));
+        deck.push_back(Card(i,"Clubs"));
+        deck.push_back(Card(i,"Spades"));
+    }
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(deck.begin(), deck.end(), g);
+
+    for (size_t i = 0; i < 26; i++) {
+        p1.insertCardToStack(deck[i * 2]);
+        p2.insertCardToStack(deck[i * 2 + 1]);
+    }
 }
 
 void Game::playTurn(){
-    this->p1.stacksize();
-    cout<<"Play turn"<<std::endl;
+    Card a = p1.draw_A_Card();
+    Card b = p2.draw_A_Card();
+    string turnData = p1.getPlayerName() + " played " + a.toString() + " " + p2.getPlayerName() + " played " + b.toString();
+    int turn = a.compare(b);
+    if(turn == 1){
+        p1.wonTheTurn(2);
+        turnData += ", " + p1.getPlayerName() + " earned 2 cards";
+        cout<< turnData;
+    }
+    else if(turn == -1){
+        p2.wonTheTurn(2);
+        turnData += ", " + p2.getPlayerName() + " earned 2 cards";
+        cout<< turnData;
+    }
+    else{
+        Game::brakeTie();
+    }
 }
 
 void Game::printWiner() {
-    cout<<"you are the winner"<<std::endl;
+    cout<<Game::winner<<endl;
 }
 
 void Game::playAll() {
-    cout<<"player1: "<<p1.getPlayerName()<<" has "<<p1.getWin_rate()<<" wins, and won "<<p1.cardesTaken()<<" cards\n";
-    cout<<"player2: "<<p2.getPlayerName()<<" has "<<p2.getWin_rate()<<" wins, and won "<<p2.cardesTaken()<<" cards\n";
+    while(draws<26){
+        playTurn();
+        ++draws;
+    }
+    cout<<p1.getPlayerName()<<" has "<<p1.getWinnings()<<" wins, and won "<<p1.cardesTaken()<<" cards\n";
+    cout<<p2.getPlayerName()<<" has "<<p2.getWinnings()<<" wins, and won "<<p2.cardesTaken()<<" cards\n";
 }
 
 void Game::printLastTurn() {
@@ -39,10 +93,30 @@ void Game::printLog() {
 }
 
 void Game::printStats() {
-    cout<<"Printing stats:"<<std::endl;
+    cout<<p1.getPlayerName()<<" has "<<p1.getWinnings()<<" wins, and won "<<p1.cardesTaken()<<" cards\n";
+    cout<<p2.getPlayerName()<<" has "<<p2.getWinnings()<<" wins, and won "<<p2.cardesTaken()<<" cards\n";
 }
 
-void brakeTie(){
-
+void Game::brakeTie(){
+    int amount = 2;
+    Card a = p1.draw_A_Card();
+    Card b = p2.draw_A_Card();
+    a = p1.draw_A_Card();
+    b = p2.draw_A_Card();
+    draws+=2;
+    string turnData = p1.getPlayerName() + " played " + a.toString() + " " + p2.getPlayerName() + " played " + b.toString();
+    if(a.compare(b) == 1){
+        amount += 4;
+        p1.wonTheTurn(amount);
+        cout<< turnData<< ", " + p1.getPlayerName() + " earned " << amount << " cards";
+    }
+    else if(a.compare(b) == -1){
+        amount += 4;
+        p2.wonTheTurn(amount);
+    }
+    else{
+        amount += 4;
+        brakeTie();
+    }
 }
 

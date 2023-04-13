@@ -1,16 +1,19 @@
 #pragma once
 
+#include <random>
 #include <iostream>
 #include <vector>
 #include "player.hpp"
 #include "card.hpp"
 using namespace ariel;
+using namespace std;
 
 class Game{
 private:
     ariel::Player p1, p2;
-    std::string winner;
+    string winner;
     int draws;
+    vector<Card> deck;
     vector<string> stats;
 
 
@@ -18,8 +21,7 @@ public:
     Game();
     Game(Player &p1, Player &p2);
 
-    void deckInit(vector<Card>& deck);
-    void shuffleDeck(vector<Card>& deck);
+    void shuffleNewDeck(vector<Card>& deck);
     void dealCards(vector<Card>& deck, Player& _p1, Player& _p2);
     void playTurn();
     void playAll(); //plays the game until the endif
