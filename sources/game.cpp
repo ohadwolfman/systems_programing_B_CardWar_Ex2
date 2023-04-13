@@ -9,7 +9,7 @@ Game::Game(){
     this->winner= "There is no winner yet";
 }
 
-Game::Game(Player p1, Player p2){
+Game::Game(Player &p1, Player &p2){
     if (&p1 == &p2) {
         throw invalid_argument("same player");
     }
@@ -40,5 +40,9 @@ void Game::printLog() {
 
 void Game::printStats() {
     cout<<"Printing stats:"<<std::endl;
+}
+
+void brakeTie(){
+
 }
 
