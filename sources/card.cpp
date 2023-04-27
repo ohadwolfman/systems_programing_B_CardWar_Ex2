@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include "card.hpp"
 
 using namespace ariel;
@@ -9,8 +10,8 @@ Card::Card (int card_number, string shape):
     card_number(card_number), shape(shape) {};
 
 string Card::toString() {
-    if (this->card_number<11 && this->card_number!=1){
-        return this->getCardNumber() + " of " + this->getShape();
+    if (this->card_number < 11 && this->card_number != 1) {
+        return std::to_string(this->card_number) + " of " + this->getShape();
     }
     else if (this->card_number == 1) {
         return "Ace of " + this->shape;

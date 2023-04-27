@@ -12,18 +12,18 @@ SOURCES=$(wildcard $(SOURCE_PATH)/*.cpp)
 HEADERS=$(wildcard $(SOURCE_PATH)/*.hpp)
 OBJECTS=$(subst sources/,objects/,$(subst .cpp,.o,$(SOURCES)))
 
-run: test1
+run: test
 
 demo: Demo.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-test1: TestRunner.o StudentTest1.o  $(OBJECTS)
+test: TestRunner.o StudentTest1.o  $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 tidy:
 	clang-tidy $(HEADERS) $(TIDY_FLAGS) --
 
-valgrind:  test1
+valgrind:  test
 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test1 2>&1 | { egrep "lost| at " || true; }
 
 %.o: %.cpp $(HEADERS)

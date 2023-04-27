@@ -37,7 +37,10 @@ void Game::shuffleNewDeck(vector<Card>& deck){
         deck.push_back(Card(i,"Spades"));
     }
 
-    random_shuffle(deck.begin(), deck.end()); //https://stackoverflow.com/questions/6926433/how-to-shuffle-a-stdvector
+    //random_shuffle(deck.begin(), deck.end()); //https://stackoverflow.com/questions/6926433/how-to-shuffle-a-stdvector
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(deck.begin(), deck.end(), g);
 
     for (size_t i = 0; i < 26; i++) {
         p1.insertCardToStack(deck[i*2]);
