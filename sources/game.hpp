@@ -17,7 +17,7 @@ private:
 
 public:
     Game();
-    Game(Player &p1, Player &p2);
+    Game(Player &pl1, Player &pl2);
 
     void shuffleNewDeck(vector<Card>& deck);
     void dealCards(vector<Card>& deck, Player& _p1, Player& _p2);

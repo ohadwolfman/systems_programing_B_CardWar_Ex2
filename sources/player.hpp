@@ -4,7 +4,7 @@
 #include <vector>
 #include "card.hpp"
 
-#define MaxCards 26
+const int MaxCards = 26;
 
 using namespace std;
 namespace ariel {
@@ -27,6 +27,6 @@ namespace ariel {
         void wonTheTurn(int amount);
         void wonTheGame();
         Card draw_A_Card();
-        void insertCardToStack(Card c);
+        void insertCardToStack(Card newCard);
     };
 }
