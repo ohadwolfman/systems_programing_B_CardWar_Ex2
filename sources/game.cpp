@@ -16,19 +16,16 @@ Game::Game():
     stats (){}
 
 Game::Game(Player &p1, Player &p2):
-        p1(p1),
-        p2(p2),
-        winner("There is no winner yet"),
-        draws(0),
-        stats ()
-        {
-            if(&p1 == &p2) {
-                throw invalid_argument("same player");
-            }
-            if (p1.isPlayingNow() || p2.isPlayingNow())
-                throw runtime_error("Wait until both of the players will finish their games");
+        p1(p1), p2(p2), winner("There is no winner yet"), draws(0), stats (){
+
+//            if (p1.isPlayingNow() || p2.isPlayingNow())
+//                throw runtime_error("Wait until both of the players will finish their games");
+        vector<Card> deck;
+        shuffleNewDeck(deck);
         }
 
+
+// Initialize deck of card, shuffle it, and deal to players
 void Game::shuffleNewDeck(vector<Card>& deck){
     for(int i=1; i<=13 ;i++){
         deck.push_back(Card(i,"Heart"));
@@ -49,18 +46,21 @@ void Game::shuffleNewDeck(vector<Card>& deck){
 }
 
 void Game::playTurn(){
+    if(&(this->p1) == &(this->p2)) {
+        throw invalid_argument("same player");
+    }
     Card a = p1.draw_A_Card();
     Card b = p2.draw_A_Card();
-    string turnData = p1.getPlayerName() + " played " + a.toString() + " " + p2.getPlayerName() + " played " + b.toString();
+    string turnData = p1.getPlayerName() + ": " + a.toString() + ", " + p2.getPlayerName() + ": " + b.toString();
     int turn = a.compare(b);
     if(turn == 1){
         p1.wonTheTurn(2);
-        turnData += ", " + p1.getPlayerName() + " earned 2 cards";
+        turnData += ", " + p1.getPlayerName() + " earned 2 cards\n";
         cout<< turnData;
     }
     else if(turn == -1){
         p2.wonTheTurn(2);
-        turnData += ", " + p2.getPlayerName() + " earned 2 cards";
+        turnData += ", " + p2.getPlayerName() + " earned 2 cards\n";
         cout<< turnData;
     }
     else{
@@ -101,11 +101,11 @@ void Game::brakeTie(){
     a = p1.draw_A_Card();
     b = p2.draw_A_Card();
     draws+=2;
-    string turnData = p1.getPlayerName() + " played " + a.toString() + " " + p2.getPlayerName() + " played " + b.toString();
+    string turnData = p1.getPlayerName() + ": " + a.toString() + ", " + p2.getPlayerName() + ": " + b.toString();
     if(a.compare(b) == 1){
         amount += 4;
         p1.wonTheTurn(amount);
-        cout<< turnData<< ", " + p1.getPlayerName() + " earned " << amount << " cards";
+        cout<< turnData<< ", " + p1.getPlayerName() + " earned " << amount << " cards\n";
     }
     else if(a.compare(b) == -1){
         amount += 4;

@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "card.hpp"
 #include <iostream>
 
 using namespace ariel;
@@ -34,7 +35,7 @@ Card Player::draw_A_Card(){
     return headCard;
 }
 
-void Player::insertCardToStack(Card c){
-    this->stack.push_back(c);
+void Player::insertCardToStack(Card newCard){
+    this->stack.push_back(newCard);
 }
 
