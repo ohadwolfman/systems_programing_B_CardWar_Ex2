@@ -6,8 +6,8 @@ using namespace ariel;
 using namespace std;
 
 // Constructor
-Player::Player(string playerName):
-    playerName(playerName), stack(), cards_won(0), winnings(0), PlayingNow(true) {
+Player::Player(const string& playerName)
+        : playerName(playerName), stack(*new vector<Card>()), cards_won(0), winnings(0), PlayingNow(true) {
     if (this->playerName.empty()) {
         throw runtime_error("Please insert a name for the player");
     }
@@ -29,11 +29,16 @@ void Player::wonTheGame(){
     ++this->cards_won;
 }
 
-Card Player::draw_A_Card(){
+Card Player::draw_A_Card() {
+    if (stack.empty()) {
+        throw runtime_error("Player's stack is empty. Cannot draw a card.");
+    }
+
     Card headCard = stack.back();
     stack.pop_back();
     return headCard;
 }
+
 
 void Player::insertCardToStack(Card newCard){
     this->stack.push_back(newCard);

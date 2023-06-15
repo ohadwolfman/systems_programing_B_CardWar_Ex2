@@ -18,7 +18,7 @@ namespace ariel {
         bool PlayingNow;
 
     public:
-        Player(string playerName); //constructor
+        Player(const string& playerName); //constructor
         string getPlayerName();
         int stacksize(); // returns the amount of cards left
         int cardesTaken(); // returns the amount of cards this player has won in this game.
